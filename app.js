@@ -1,12 +1,18 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const postsRoutes = require('./api/posts/posts.routes');
-const connectDb = require('./database');
+const postsRoutes = require("./api/posts/posts.routes");
+const connectDb = require("./database");
+const PORT = 8000;
 
 connectDb();
-app.use(express.json());
-app.use('/posts', postsRoutes);
 
-app.listen(8000, () => {
-  console.log('The application is running on localhost:8000');
+// middlewares
+const { pathNotFound, handleError } = require("./middlewares");
+app.use(express.json());
+app.use("/api/posts", postsRoutes);
+app.use(pathNotFound);
+app.use(handleError);
+
+app.listen(PORT, () => {
+  console.log("The application is running on localhost: " + PORT);
 });
